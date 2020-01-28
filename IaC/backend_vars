@@ -1,0 +1,4 @@
+bucket="bucket-my-lambdas-sgcg"
+key="terraform.tfstate"
+region="us-east-1"
+profile="salvador"

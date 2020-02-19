@@ -2,12 +2,8 @@
 # AIRFLOW CLUSTER RESOURCES
 # ---------------------------------------
 
-# ---------------------------------------
-# LABELS
-# ---------------------------------------
-
 resource "aws_key_pair" "auth" {
-  key_name   = coalesce(var.key_name, module.airflow_labels.id)
+  key_name   = var.key_name
   public_key = coalesce(var.public_key, file(var.public_key_path))
 }
 
@@ -55,4 +51,77 @@ POLICY
 
 }
 
+# ---------------------------------------
+# Customized VPC
+# ---------------------------------------
+
+resource "aws_vpc" "main" {
+  cidr_block = "10.16.0.0/16"
+  enable_dns_hostnames = true
+  tags          = {
+    Name        = "${var.tag_airflow}-vpcid"
+    Stage = var.environment
+    Team = "Airflow-${var.team}"
+  }
+}
+
+resource "aws_subnet" "subnet1" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.16.0.0/24"
+  availability_zone = var.azs["1"]
+
+  tags          = {
+    Name        = "${var.tag_airflow}-subnet1"
+    Stage = var.environment
+    Team = "Airflow-${var.team}"
+  }
+}
+
+resource "aws_subnet" "subnet2" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.16.1.0/24"
+  availability_zone = var.azs["2"]
+
+  tags          = {
+    Name        = "${var.tag_airflow}-subnet2"
+    Stage = var.environment
+    Team = "Airflow-${var.team}"
+  }
+}
+
+resource "aws_route_table" "rt" {
+  vpc_id = aws_vpc.main.id
+
+  tags          = {
+    Name        = "${var.tag_airflow}-route-table"
+    Stage = var.environment
+    Team = "Airflow-${var.team}"
+  }
+}
+
+resource "aws_route" "public_internet_gateway" {
+  route_table_id         = aws_route_table.rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.gw.id
+}
+
+resource "aws_route_table_association" "rt_subnet1" {
+  subnet_id      = aws_subnet.subnet1.id
+  route_table_id = aws_route_table.rt.id
+}
+
+resource "aws_route_table_association" "rt_subnet2" {
+  subnet_id      = aws_subnet.subnet2.id
+  route_table_id = aws_route_table.rt.id
+}
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.main.id
+
+  tags          = {
+    Name        = "${var.tag_airflow}-ig"
+    Stage = var.environment
+    Team = "Airflow-${var.team}"
+  }
+}
 

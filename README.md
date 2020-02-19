@@ -24,11 +24,6 @@ webserver_instance_type = "t2.micro"
 scheduler_instance_type = "t2.micro"
 worker_instance_type    = "t2.micro"
 ```
-Run Terraform's init command with its configuration file
-
-```
-terraform init -reconfigure -backend-config=backend_vars 
-```
 
 Run Terraform's plan command to have an insight of the infrastructure
 

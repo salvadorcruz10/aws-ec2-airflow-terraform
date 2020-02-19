@@ -25,6 +25,12 @@ scheduler_instance_type = "t2.micro"
 worker_instance_type    = "t2.micro"
 ```
 
+Change this parameter on [terraform.tfvars](IaC2/terraform.tfvars) with your profile name configured in ~/.aws/credentials file
+
+```
+aws_profile = "your-aws-profile"
+```
+
 Run Terraform's plan command to have an insight of the infrastructure
 
 ```

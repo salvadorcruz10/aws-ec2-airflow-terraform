@@ -1,20 +1,3 @@
-# General
-variable "service" {
-  description = "The name of the service"
-  default     = "vault"
-}
-
-variable "environment" {
-  description = "The environment, such as development/stage/production"
-  default     = "production"
-}
-
-# AWS
-variable "aws_profile" {
-  type        = "string"
-  description = "Profile"
-}
-
 ###########
 # Globals #
 ###########
@@ -42,10 +25,16 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "aws_profile" {
+  description = "AWS Profile"
+  type        = string
+  default     = "default"
+}
+
 variable "key_name" {
   description = "AWS KeyPair name."
   type        = string
-  default     = null
+  default     = "airflow-key-name"
 }
 
 variable "private_key" {
@@ -63,13 +52,13 @@ variable "public_key" {
 variable "private_key_path" {
   description = "Enter the path to the SSH Private Key to run provisioner."
   type        = string
-  default     = "~/.ssh/airflow/id_rsa"
+  default     = "~/.ssh/id_rsa"
 }
 
 variable "public_key_path" {
   description = "Enter the path to the SSH Public Key to add to AWS."
   type        = string
-  default     = "~/.ssh/airflow/id_rsa.pub"
+  default     = "~/.ssh/id_rsa.pub"
 }
 
 variable "vpc_id" {
@@ -216,7 +205,7 @@ variable "instance_subnet_id" {
 variable "webserver_instance_type" {
   description = "Instance type for the Airflow Webserver."
   type        = string
-  default     = "t2.micro"
+  default     = "t3.micro"
 }
 
 variable "webserver_port" {
@@ -228,14 +217,13 @@ variable "webserver_port" {
 variable "scheduler_instance_type" {
   description = "Instance type for the Airflow Scheduler."
   type        = string
-  default     = "t2.micro"
+  default     = "t3.micro"
 }
 
 variable "worker_instance_type" {
   description = "Instance type for the Celery Worker."
   type        = string
-  #default     = "t3.small"
-  default     = "t2.micro"
+  default     = "t3.small"
 }
 
 variable "worker_instance_count" {
@@ -284,16 +272,19 @@ variable "db_instance_type" {
 
 variable "db_username" {
   description = "PostgreSQL username."
+  type        = string
   default     = "airflow"
 }
 
 variable "db_dbname" {
   description = "PostgreSQL database name."
+  type        = string
   default     = "airflow"
 }
 
 variable "db_password" {
   description = "PostgreSQL password."
+  type        = string
 }
 
 variable "db_allocated_storage" {
@@ -311,21 +302,6 @@ variable "db_subnet_group_name" {
 #------------------------------------------------------------
 # Data sources
 #------------------------------------------------------------
-
-data "aws_vpc" "default" {
-  #default = var.vpc_id == "" ? true : false
-  #id      = var.vpc_id
-  id = "vpc-7621aa0c"
-}
-
-data "aws_subnet_ids" "all" {
-  vpc_id = data.aws_vpc.default.id
-}
-
-data "aws_security_group" "default" {
-  vpc_id = data.aws_vpc.default.id
-  name   = "default"
-}
 
 data "template_file" "airflow_service" {
   template = file("${path.module}/files/airflow.service")
@@ -364,7 +340,7 @@ data "template_file" "airflow_environment" {
     S3_BUCKET          = aws_s3_bucket.airflow_logs.id
     # WEBSERVER_HOST     = "${aws_instance.airflow_webserver.public_dns}"
     WEBSERVER_PORT = var.webserver_port
-    QUEUE_NAME     = "${module.airflow_labels.id}-queue"
+    QUEUE_NAME     = "${var.tag_airflow}-sqs"
   }
 }
 
@@ -389,6 +365,24 @@ data "template_file" "provisioner" {
     S3_BUCKET          = aws_s3_bucket.airflow_logs.id
     # WEBSERVER_HOST     = "${aws_instance.airflow_webserver.public_dns}"
     WEBSERVER_PORT = var.webserver_port
-    QUEUE_NAME     = "${module.airflow_labels.id}-queue"
+    QUEUE_NAME     = "${var.tag_airflow}-sqs"
   }
+}
+
+variable "tag_airflow"{
+  description = "Tag used to identify resources"
+  type = string
+  default = "airflow"
+}
+
+variable "environment"{
+  description = "Tag used to identify resources"
+  type = string
+  default = "Dev"
+}
+
+variable "team"{
+  description = "Tag used to identify resources"
+  type = string
+  default = "Wizeline"
 }

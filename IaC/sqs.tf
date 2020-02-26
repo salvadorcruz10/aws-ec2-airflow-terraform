@@ -3,9 +3,12 @@
 # ---------------------------------------
 
 resource "aws_sqs_queue" "airflow_queue" {
-  name             = "${module.airflow_labels.id}-queue"
+  name             = "${var.tag_airflow}-sqs"
   max_message_size = 262144
 
-  tags = module.airflow_labels.tags
+  tags          = {
+    Name        = "${var.tag_airflow}-sqs"
+    Stage = var.environment
+    Team = "Airflow-${var.team}"
+  }
 }
-

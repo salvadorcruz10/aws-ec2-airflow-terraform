@@ -10,33 +10,33 @@ resource "aws_db_subnet_group" "mysubnetgroup" {
   name       = "mysubnetgroup"
   subnet_ids = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
 
-  tags          = {
-    Name        = "${var.tag_airflow}-my-db-subnet-group"
+  tags = {
+    Name  = "${var.tag_airflow}-my-db-subnet-group"
     Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Team  = "Airflow-${var.team}"
   }
 
-  depends_on = [aws_subnet.subnet1,aws_subnet.subnet2]
+  depends_on = [aws_subnet.subnet1, aws_subnet.subnet2]
 }
 
 resource "aws_security_group" "sg_database" {
-  name                                                     = "${var.tag_airflow}-database-sg"
-  description                                              = "Security group for ${var.db_dbname} database"
+  name        = "${var.tag_airflow}-database-sg"
+  description = "Security group for ${var.db_dbname} database"
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
     security_groups = [aws_security_group.sg_airflow.id]
   }
 
-  tags          = {
-    Name        = "${var.tag_airflow}-database-sg"
+  tags = {
+    Name      = "${var.tag_airflow}-database-sg"
     Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Role      = "role-${var.tag_airflow}"
+    Stage     = var.environment
+    Team      = "Airflow-${var.team}"
   }
 
 }
@@ -58,5 +58,5 @@ resource "aws_db_instance" "airflow_database" {
   skip_final_snapshot     = true
   vpc_security_group_ids  = [aws_security_group.sg_database.id]
   port                    = "5432"
-  db_subnet_group_name    =  aws_db_subnet_group.mysubnetgroup.name
+  db_subnet_group_name    = aws_db_subnet_group.mysubnetgroup.name
 }

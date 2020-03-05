@@ -56,46 +56,46 @@ POLICY
 # ---------------------------------------
 
 resource "aws_vpc" "main" {
-  cidr_block = "10.16.0.0/16"
+  cidr_block           = "10.16.0.0/16"
   enable_dns_hostnames = true
-  tags          = {
-    Name        = "${var.tag_airflow}-vpcid"
+  tags = {
+    Name  = "${var.tag_airflow}-vpcid"
     Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Team  = "Airflow-${var.team}"
   }
 }
 
 resource "aws_subnet" "subnet1" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.16.0.0/24"
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.16.0.0/24"
   availability_zone = var.azs["1"]
 
-  tags          = {
-    Name        = "${var.tag_airflow}-subnet1"
+  tags = {
+    Name  = "${var.tag_airflow}-subnet1"
     Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Team  = "Airflow-${var.team}"
   }
 }
 
 resource "aws_subnet" "subnet2" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.16.1.0/24"
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.16.1.0/24"
   availability_zone = var.azs["2"]
 
-  tags          = {
-    Name        = "${var.tag_airflow}-subnet2"
+  tags = {
+    Name  = "${var.tag_airflow}-subnet2"
     Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Team  = "Airflow-${var.team}"
   }
 }
 
 resource "aws_route_table" "rt" {
   vpc_id = aws_vpc.main.id
 
-  tags          = {
-    Name        = "${var.tag_airflow}-route-table"
+  tags = {
+    Name  = "${var.tag_airflow}-route-table"
     Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Team  = "Airflow-${var.team}"
   }
 }
 
@@ -118,10 +118,10 @@ resource "aws_route_table_association" "rt_subnet2" {
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
-  tags          = {
-    Name        = "${var.tag_airflow}-ig"
+  tags = {
+    Name  = "${var.tag_airflow}-ig"
     Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Team  = "Airflow-${var.team}"
   }
 }
 

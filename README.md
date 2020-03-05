@@ -13,7 +13,12 @@ ssh-keygen -t rsa -b 4096
 
 ### Terraform version
 
-0.12.6
+[0.12.6](https://github.com/hashicorp/terraform/tree/v0.12.16)
+
+
+This project uses a Terraform version manager called [tfenv](https://github.com/tfutils/tfenv).
+If you already have tfenv installed, it will point automatically your Terraform to the 0.12.6 version.
+
 
 ### How to deploy an environment
 

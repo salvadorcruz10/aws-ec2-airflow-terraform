@@ -187,7 +187,7 @@ variable "s3_bucket_name" {
 
 variable "azs" {
   description = "Run the EC2 Instances in these Availability Zones"
-  default = ["us-east-1a","us-east-1b"]
+  default     = ["us-east-1a", "us-east-1b"]
 }
 
 variable "instance_subnet_id" {
@@ -363,10 +363,10 @@ data "template_file" "provisioner" {
   }
 }
 
-variable "prefix_name"{
+variable "prefix_name" {
   description = "Tag used to identify resources"
-  type = string
-  default = "airflow"
+  type        = string
+  default     = "airflow"
 }
 
 variable "subnets_cidr" {
@@ -374,8 +374,8 @@ variable "subnets_cidr" {
 }
 
 
-variable "environment"{
+variable "environment" {
   description = "Environment type"
-  type = string
-  default = "Dev"
+  type        = string
+  default     = "Dev"
 }

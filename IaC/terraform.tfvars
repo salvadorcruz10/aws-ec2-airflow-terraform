@@ -1,8 +1,8 @@
-aws_region        = "us-east-1"
-aws_profile       = "salvador"
-environment       = "development"
-cluster_name      = "airflow-example-deploy"
-s3_bucket_name    = "airflow-example-deploy-logs"
+aws_region     = "us-east-1"
+aws_profile    = "salvador"
+environment    = "development"
+cluster_name   = "airflow-example-deploy"
+s3_bucket_name = "airflow-example-deploy-logs"
 #fernet_key        = "HeY9Aivs7vADx5oy7SBKHfRJdj3fhpD_6IX2LnlDN74=" # Just for example purposes, for real projects you may want to create a terraform.tfvars file
 key_name          = "airflow-key-2"
 private_key_path  = "~/.ssh/airflow/id_rsa"
@@ -11,13 +11,13 @@ load_example_dags = true
 
 tags = {
   Project = "Airflow"
-  Team = "Wizeline"
+  Team    = "Wizeline"
 }
 
-prefix_name = "airflow"
+prefix_name  = "airflow"
 subnets_cidr = ["10.16.0.0/24", "10.16.1.0/24"]
 
-rbac           = false
+rbac = false
 
 /**** Instance types *****/
 webserver_instance_type = "t2.micro"
@@ -26,7 +26,7 @@ worker_instance_type    = "t2.micro"
 worker_instance_count   = 1
 
 /**** Database *****/
-db_instance_type        = "db.t2.micro"
-db_username             = "airflow"
-db_dbname               = "airflow"
+db_instance_type = "db.t2.micro"
+db_username      = "airflow"
+db_dbname        = "airflow"
 #db_password             = "123456789A*"    # Just for example purposes, for real projects you may want to create a terraform.tfvars file

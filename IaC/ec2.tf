@@ -13,9 +13,9 @@ resource "aws_security_group" "sg_airflow" {
 
   ingress {
     # TLS (change to whatever ports you need)
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
     # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
     cidr_blocks = ["0.0.0.0/0"] # add a CIDR block here
@@ -23,9 +23,9 @@ resource "aws_security_group" "sg_airflow" {
 
   ingress {
     # TLS (change to whatever ports you need)
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
+    from_port = 8080
+    to_port   = 8080
+    protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
     # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
     cidr_blocks = ["0.0.0.0/0"] # add a CIDR block here
@@ -33,9 +33,9 @@ resource "aws_security_group" "sg_airflow" {
 
   ingress {
     # TLS (change to whatever ports you need)
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
     # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
     cidr_blocks = ["0.0.0.0/0"] # add a CIDR block here
@@ -43,9 +43,9 @@ resource "aws_security_group" "sg_airflow" {
 
   ingress {
     # TLS (change to whatever ports you need)
-    from_port   = 5555
-    to_port     = 5555
-    protocol    = "tcp"
+    from_port = 5555
+    to_port   = 5555
+    protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
     # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
     cidr_blocks = ["0.0.0.0/0"] # add a CIDR block here
@@ -53,19 +53,19 @@ resource "aws_security_group" "sg_airflow" {
 
   ingress {
     # TLS (change to whatever ports you need)
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
     # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
     cidr_blocks = ["0.0.0.0/0"] # add a CIDR block here
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
 }
@@ -80,7 +80,7 @@ resource "aws_instance" "airflow_webserver" {
   ami                    = var.ami
   key_name               = aws_key_pair.auth.id
   vpc_security_group_ids = [aws_security_group.sg_airflow.id]
-  subnet_id              =  data.aws_subnet.sub_ec2.id
+  subnet_id              = data.aws_subnet.sub_ec2.id
   iam_instance_profile   = module.ami_instance_profile.instance_profile_name
 
   associate_public_ip_address = true

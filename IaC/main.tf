@@ -56,28 +56,28 @@ POLICY
 # ---------------------------------------
 
 resource "aws_vpc" "airflow" {
-  cidr_block = "10.16.0.0/16"
+  cidr_block           = "10.16.0.0/16"
   enable_dns_hostnames = true
-  tags = merge(map("Name", "${var.prefix_name}-vpc"), var.tags)
+  tags                 = merge(map("Name", "${var.prefix_name}-vpc"), var.tags)
 }
 
 resource "aws_subnet" "sub_public1" {
-  vpc_id = aws_vpc.airflow.id
-  cidr_block = element(var.subnets_cidr,0)
-  availability_zone = element(var.azs,0)
-  tags = merge(map("Name", "${var.prefix_name}-subnet-1"), var.tags)
+  vpc_id            = aws_vpc.airflow.id
+  cidr_block        = element(var.subnets_cidr, 0)
+  availability_zone = element(var.azs, 0)
+  tags              = merge(map("Name", "${var.prefix_name}-subnet-1"), var.tags)
 }
 
 resource "aws_subnet" "sub_public2" {
-  vpc_id = aws_vpc.airflow.id
-  cidr_block = element(var.subnets_cidr,1)
-  availability_zone = element(var.azs,1)
-  tags = merge(map("Name", "${var.prefix_name}-subnet-2"), var.tags)
+  vpc_id            = aws_vpc.airflow.id
+  cidr_block        = element(var.subnets_cidr, 1)
+  availability_zone = element(var.azs, 1)
+  tags              = merge(map("Name", "${var.prefix_name}-subnet-2"), var.tags)
 }
 
 resource "aws_route_table" "rt" {
   vpc_id = aws_vpc.airflow.id
-  tags = merge(map("Name", "${var.prefix_name}-routing-table"), var.tags)
+  tags   = merge(map("Name", "${var.prefix_name}-routing-table"), var.tags)
 }
 
 resource "aws_route" "public_internet_gateway" {
@@ -98,6 +98,6 @@ resource "aws_route_table_association" "rt_association2" {
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.airflow.id
-  tags = merge(map("Name", "${var.prefix_name}-internet-gateway"), var.tags)
+  tags   = merge(map("Name", "${var.prefix_name}-internet-gateway"), var.tags)
 }
 

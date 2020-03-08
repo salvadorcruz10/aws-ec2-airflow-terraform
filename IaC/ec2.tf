@@ -2,10 +2,14 @@
 # CREATE A SECURITY GROUP TO CONTROL WHAT REQUESTS CAN GO IN AND OUT OF EACH EC2 INSTANCE
 # ----------------------------------------------------------------------------------------
 
+data "aws_subnet" "sub_ec2" {
+  id = aws_subnet.sub_public1.id
+}
+
 resource "aws_security_group" "sg_airflow" {
   name        = "airflow-sg"
   description = "Security group for airflow"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = aws_vpc.airflow.id
 
   ingress {
     # TLS (change to whatever ports you need)
@@ -76,18 +80,12 @@ resource "aws_instance" "airflow_webserver" {
   ami                    = var.ami
   key_name               = aws_key_pair.auth.id
   vpc_security_group_ids = [aws_security_group.sg_airflow.id]
-  subnet_id              = aws_subnet.subnet1.id
+  subnet_id              =  data.aws_subnet.sub_ec2.id
   iam_instance_profile   = module.ami_instance_profile.instance_profile_name
 
   associate_public_ip_address = true
 
-  volume_tags          = {
-    Name        = "${var.tag_airflow}-webserver"
-    Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
-  }
+  volume_tags = merge(map("Name", "${var.prefix_name}-webserver-volume"), var.tags)
 
   root_block_device {
     volume_type           = var.root_volume_type
@@ -163,13 +161,7 @@ resource "aws_instance" "airflow_webserver" {
 
   user_data = data.template_file.provisioner.rendered
 
-  tags          = {
-    Name        = "${var.tag_airflow}-webserver"
-    Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
-  }
+  tags = merge(map("Name", "${var.prefix_name}-webserver"), var.tags)
 
   lifecycle {
     create_before_destroy = true
@@ -183,18 +175,12 @@ resource "aws_instance" "airflow_scheduler" {
   ami                    = var.ami
   key_name               = aws_key_pair.auth.id
   vpc_security_group_ids = [aws_security_group.sg_airflow.id]
-  subnet_id              = aws_subnet.subnet1.id
+  subnet_id              = data.aws_subnet.sub_ec2.id
   iam_instance_profile   = module.ami_instance_profile.instance_profile_name
 
   associate_public_ip_address = true
 
-  volume_tags          = {
-    Name        = "${var.tag_airflow}-scheduler"
-    Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
-  }
+  volume_tags = merge(map("Name", "${var.prefix_name}-scheduler-volume"), var.tags)
 
   root_block_device {
     volume_type           = var.root_volume_type
@@ -270,13 +256,7 @@ resource "aws_instance" "airflow_scheduler" {
 
   user_data = data.template_file.provisioner.rendered
 
-  tags          = {
-    Name        = "${var.tag_airflow}-scheduler"
-    Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
-  }
+  tags = merge(map("Name", "${var.prefix_name}-scheduler"), var.tags)
 
   lifecycle {
     create_before_destroy = true
@@ -290,18 +270,12 @@ resource "aws_instance" "airflow_worker" {
   ami                    = var.ami
   key_name               = aws_key_pair.auth.id
   vpc_security_group_ids = [aws_security_group.sg_airflow.id]
-  subnet_id              = aws_subnet.subnet1.id
+  subnet_id              = data.aws_subnet.sub_ec2.id
   iam_instance_profile   = module.ami_instance_profile.instance_profile_name
 
   associate_public_ip_address = true
 
-  volume_tags          = {
-    Name        = "${var.tag_airflow}-worker"
-    Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
-  }
+  volume_tags = merge(map("Name", "${var.prefix_name}-worker-volume"), var.tags)
 
   root_block_device {
     volume_type           = var.root_volume_type
@@ -377,13 +351,7 @@ resource "aws_instance" "airflow_worker" {
 
   user_data = data.template_file.provisioner.rendered
 
-  tags          = {
-    Name        = "${var.tag_airflow}-worker"
-    Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
-  }
+  tags = merge(map("Name", "${var.prefix_name}-worker"), var.tags)
 
   lifecycle {
     create_before_destroy = true

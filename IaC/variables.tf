@@ -187,13 +187,7 @@ variable "s3_bucket_name" {
 
 variable "azs" {
   description = "Run the EC2 Instances in these Availability Zones"
-  type        = map(string)
-  default = {
-    "1" = "us-east-1a"
-    "2" = "us-east-1b"
-    "3" = "us-east-1c"
-    "4" = "us-east-1d"
-  }
+  default = ["us-east-1a","us-east-1b"]
 }
 
 variable "instance_subnet_id" {
@@ -340,7 +334,7 @@ data "template_file" "airflow_environment" {
     S3_BUCKET          = aws_s3_bucket.airflow_logs.id
     # WEBSERVER_HOST     = "${aws_instance.airflow_webserver.public_dns}"
     WEBSERVER_PORT = var.webserver_port
-    QUEUE_NAME     = "${var.tag_airflow}-sqs"
+    QUEUE_NAME     = "${var.prefix_name}-sqs"
   }
 }
 
@@ -365,24 +359,23 @@ data "template_file" "provisioner" {
     S3_BUCKET          = aws_s3_bucket.airflow_logs.id
     # WEBSERVER_HOST     = "${aws_instance.airflow_webserver.public_dns}"
     WEBSERVER_PORT = var.webserver_port
-    QUEUE_NAME     = "${var.tag_airflow}-sqs"
+    QUEUE_NAME     = "${var.prefix_name}-sqs"
   }
 }
 
-variable "tag_airflow"{
+variable "prefix_name"{
   description = "Tag used to identify resources"
   type = string
   default = "airflow"
 }
 
-variable "environment"{
-  description = "Tag used to identify resources"
-  type = string
-  default = "Dev"
+variable "subnets_cidr" {
+  type = "list"
 }
 
-variable "team"{
-  description = "Tag used to identify resources"
+
+variable "environment"{
+  description = "Environment type"
   type = string
-  default = "Wizeline"
+  default = "Dev"
 }

@@ -9,8 +9,13 @@ private_key_path  = "~/.ssh/airflow/id_rsa"
 public_key_path   = "~/.ssh/airflow/id_rsa.pub"
 load_example_dags = true
 
-tag_airflow = "airflow-test"
-team        = "Wizeline"
+tags = {
+  Project = "Airflow"
+  Team    = "Wizeline"
+}
+
+prefix_name  = "airflow"
+subnets_cidr = ["10.16.0.0/24", "10.16.1.0/24"]
 
 rbac = false
 

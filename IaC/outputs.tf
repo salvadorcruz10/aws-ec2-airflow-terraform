@@ -5,7 +5,7 @@ output "this_cluster_security_group_id" {
 
 output "this_database_security_group_id" {
   description = "The ID of the security group"
-  value       = aws_security_group.sg_database.id
+  value       = aws_security_group.database_sg.id
 }
 
 output "webserver_admin_url" {

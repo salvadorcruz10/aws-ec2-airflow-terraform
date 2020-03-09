@@ -6,23 +6,16 @@
 # CREATE A SECURITY GROUP TO CONTROL WHAT REQUESTS CAN GO IN AND OUT OF RDS
 # -------------------------------------------------------------------------
 
-resource "aws_db_subnet_group" "mysubnetgroup" {
-  name       = "mysubnetgroup"
-  subnet_ids = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
-
-  tags = {
-    Name  = "${var.tag_airflow}-my-db-subnet-group"
-    Stage = var.environment
-    Team  = "Airflow-${var.team}"
-  }
-
-  depends_on = [aws_subnet.subnet1, aws_subnet.subnet2]
+resource "aws_db_subnet_group" "this" {
+  name       = "airflow_db_subnet_group"
+  subnet_ids = [aws_subnet.sub_public1.id, aws_subnet.sub_public2.id]
+  tags       = merge(map("Name", "${var.prefix_name}-db-subnet-group"), var.tags)
 }
 
-resource "aws_security_group" "sg_database" {
-  name        = "${var.tag_airflow}-database-sg"
+resource "aws_security_group" "database_sg" {
+  name        = "${var.prefix_name}-database-sg"
   description = "Security group for ${var.db_dbname} database"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = aws_vpc.airflow.id
 
   ingress {
     from_port       = 5432
@@ -31,18 +24,12 @@ resource "aws_security_group" "sg_database" {
     security_groups = [aws_security_group.sg_airflow.id]
   }
 
-  tags = {
-    Name      = "${var.tag_airflow}-database-sg"
-    Namespace = var.tag_airflow
-    Role      = "role-${var.tag_airflow}"
-    Stage     = var.environment
-    Team      = "Airflow-${var.team}"
-  }
+  tags = merge(map("Name", "${var.prefix_name}-database-security-group"), var.tags)
 
 }
 
 resource "aws_db_instance" "airflow_database" {
-  identifier              = "${module.airflow_labels.id}-db"
+  identifier              = "${var.prefix_name}-db"
   allocated_storage       = var.db_allocated_storage
   engine                  = "postgres"
   engine_version          = "11.5"
@@ -56,7 +43,7 @@ resource "aws_db_instance" "airflow_database" {
   publicly_accessible     = false
   apply_immediately       = true
   skip_final_snapshot     = true
-  vpc_security_group_ids  = [aws_security_group.sg_database.id]
+  vpc_security_group_ids  = [aws_security_group.database_sg.id]
   port                    = "5432"
-  db_subnet_group_name    = aws_db_subnet_group.mysubnetgroup.name
+  db_subnet_group_name    = aws_db_subnet_group.this.name
 }

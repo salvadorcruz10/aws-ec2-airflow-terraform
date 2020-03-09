@@ -13,35 +13,27 @@ ssh-keygen -t rsa -b 4096
 
 ### Terraform version
 
-0.12.6
+[0.12.6](https://github.com/hashicorp/terraform/tree/v0.12.16)
+
+
+This project uses a Terraform version manager called [tfenv](https://github.com/tfutils/tfenv).
+If you already have tfenv installed, it will point automatically your Terraform to the 0.12.6 version.
+
 
 ### How to deploy an environment
 
-It is optional to create an S3 bucket to store the Terraform state
-
-```
-aws s3 mb s3://bucket-name
-```
-
-In [backend_vars](IaC/backend_vars) file configure parameters for the backend, for example
-
-```
-bucket="my-bucket-name"
-key="terraform.tfstate"
-region="us-east-1"
-```
-
-In [terraform.tfvars](IaC/terraform.tfvars) file configure parameters for your infrastructure, for example
+In [terraform.tfvars](IaC2/terraform.tfvars) file configure parameters for your infrastructure, for example
 
 ```
 webserver_instance_type = "t2.micro"
 scheduler_instance_type = "t2.micro"
 worker_instance_type    = "t2.micro"
 ```
-Run Terraform's init command with its configuration file
+
+Change this parameter on [terraform.tfvars](IaC2/terraform.tfvars) with your profile name configured in ~/.aws/credentials file
 
 ```
-terraform init -reconfigure -backend-config=backend_vars 
+aws_profile = "your-aws-profile"
 ```
 
 Run Terraform's plan command to have an insight of the infrastructure

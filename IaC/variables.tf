@@ -369,20 +369,20 @@ data "template_file" "provisioner" {
   }
 }
 
-variable "tag_airflow"{
+variable "tag_airflow" {
   description = "Tag used to identify resources"
-  type = string
-  default = "airflow"
+  type        = string
+  default     = "airflow"
 }
 
-variable "environment"{
+variable "environment" {
   description = "Tag used to identify resources"
-  type = string
-  default = "Dev"
+  type        = string
+  default     = "Dev"
 }
 
-variable "team"{
+variable "team" {
   description = "Tag used to identify resources"
-  type = string
-  default = "Wizeline"
+  type        = string
+  default     = "Wizeline"
 }

@@ -9,9 +9,9 @@ resource "aws_security_group" "sg_airflow" {
 
   ingress {
     # TLS (change to whatever ports you need)
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
     # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
     cidr_blocks = ["0.0.0.0/0"] # add a CIDR block here
@@ -19,9 +19,9 @@ resource "aws_security_group" "sg_airflow" {
 
   ingress {
     # TLS (change to whatever ports you need)
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
+    from_port = 8080
+    to_port   = 8080
+    protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
     # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
     cidr_blocks = ["0.0.0.0/0"] # add a CIDR block here
@@ -29,9 +29,9 @@ resource "aws_security_group" "sg_airflow" {
 
   ingress {
     # TLS (change to whatever ports you need)
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
     # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
     cidr_blocks = ["0.0.0.0/0"] # add a CIDR block here
@@ -39,9 +39,9 @@ resource "aws_security_group" "sg_airflow" {
 
   ingress {
     # TLS (change to whatever ports you need)
-    from_port   = 5555
-    to_port     = 5555
-    protocol    = "tcp"
+    from_port = 5555
+    to_port   = 5555
+    protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
     # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
     cidr_blocks = ["0.0.0.0/0"] # add a CIDR block here
@@ -49,19 +49,19 @@ resource "aws_security_group" "sg_airflow" {
 
   ingress {
     # TLS (change to whatever ports you need)
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
     # Please restrict your ingress to only necessary IPs and ports.
     # Opening to 0.0.0.0/0 can lead to security vulnerabilities.
     cidr_blocks = ["0.0.0.0/0"] # add a CIDR block here
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
 }
@@ -81,12 +81,12 @@ resource "aws_instance" "airflow_webserver" {
 
   associate_public_ip_address = true
 
-  volume_tags          = {
-    Name        = "${var.tag_airflow}-webserver"
+  volume_tags = {
+    Name      = "${var.tag_airflow}-webserver"
     Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Role      = "role-${var.tag_airflow}"
+    Stage     = var.environment
+    Team      = "Airflow-${var.team}"
   }
 
   root_block_device {
@@ -163,12 +163,12 @@ resource "aws_instance" "airflow_webserver" {
 
   user_data = data.template_file.provisioner.rendered
 
-  tags          = {
-    Name        = "${var.tag_airflow}-webserver"
+  tags = {
+    Name      = "${var.tag_airflow}-webserver"
     Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Role      = "role-${var.tag_airflow}"
+    Stage     = var.environment
+    Team      = "Airflow-${var.team}"
   }
 
   lifecycle {
@@ -188,12 +188,12 @@ resource "aws_instance" "airflow_scheduler" {
 
   associate_public_ip_address = true
 
-  volume_tags          = {
-    Name        = "${var.tag_airflow}-scheduler"
+  volume_tags = {
+    Name      = "${var.tag_airflow}-scheduler"
     Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Role      = "role-${var.tag_airflow}"
+    Stage     = var.environment
+    Team      = "Airflow-${var.team}"
   }
 
   root_block_device {
@@ -270,12 +270,12 @@ resource "aws_instance" "airflow_scheduler" {
 
   user_data = data.template_file.provisioner.rendered
 
-  tags          = {
-    Name        = "${var.tag_airflow}-scheduler"
+  tags = {
+    Name      = "${var.tag_airflow}-scheduler"
     Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Role      = "role-${var.tag_airflow}"
+    Stage     = var.environment
+    Team      = "Airflow-${var.team}"
   }
 
   lifecycle {
@@ -295,12 +295,12 @@ resource "aws_instance" "airflow_worker" {
 
   associate_public_ip_address = true
 
-  volume_tags          = {
-    Name        = "${var.tag_airflow}-worker"
+  volume_tags = {
+    Name      = "${var.tag_airflow}-worker"
     Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Role      = "role-${var.tag_airflow}"
+    Stage     = var.environment
+    Team      = "Airflow-${var.team}"
   }
 
   root_block_device {
@@ -377,12 +377,12 @@ resource "aws_instance" "airflow_worker" {
 
   user_data = data.template_file.provisioner.rendered
 
-  tags          = {
-    Name        = "${var.tag_airflow}-worker"
+  tags = {
+    Name      = "${var.tag_airflow}-worker"
     Namespace = var.tag_airflow
-    Role = "role-${var.tag_airflow}"
-    Stage = var.environment
-    Team = "Airflow-${var.team}"
+    Role      = "role-${var.tag_airflow}"
+    Stage     = var.environment
+    Team      = "Airflow-${var.team}"
   }
 
   lifecycle {
